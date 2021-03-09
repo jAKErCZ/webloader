@@ -9,12 +9,14 @@
  *
  */
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace WebLoader;
 
+
 class FilesCollectionRender
 {
+
     private const
         LINK_ELEMENT = 'link',
         SCRIPT_ELEMENT = 'script',
@@ -58,7 +60,7 @@ class FilesCollectionRender
     }
 
 
-    public function css(?string $collectionName = null, array $attributes = [], bool $loadContent = false): string
+    public function css(?string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
     {
         $collection = $this->getSelectedCollection(Engine::CSS, $collectionName);
         $collectionName = $collection->getName();
@@ -67,10 +69,11 @@ class FilesCollectionRender
         $attributes['type'] = self::STYLE_TYPE_ATTRIBUTE;
         $element = self::STYLE_ELEMENT;
         $basePath = $this->getCollectionBasePath($collectionName, Engine::CSS);
-        $filePathParameter = null;
+        $filePathParameter = NULL;
 
         if ($loadContent || $collection->isContentLoadingEnabled()) {
             $filePathParameter = $this->getCollectionFilePath($basePath);
+
         } else {
             $element = self::LINK_ELEMENT;
             $attributes['rel'] = 'stylesheet';
@@ -86,7 +89,7 @@ class FilesCollectionRender
      * @param array|string|NULL $collectionsNames
      * @return string
      */
-    public function cssPrefetch($collectionsNames = null): string
+    public function cssPrefetch($collectionsNames = NULL): string
     {
         return $this->generateMetaLinkElements($collectionsNames, Engine::CSS, self::LINK_PREFETCH);
     }
@@ -96,13 +99,10 @@ class FilesCollectionRender
      * @param array|string|NULL $collectionsNames
      * @return string
      */
-    public function cssPreload($collectionsNames = null): string
+    public function cssPreload($collectionsNames = NULL): string
     {
         return $this->generateMetaLinkElements(
-            $collectionsNames,
-            Engine::CSS,
-            self::LINK_PRELOAD,
-            self::LINK_PRELOAD_AS_CSS
+            $collectionsNames, Engine::CSS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_CSS
         );
     }
 
@@ -113,7 +113,7 @@ class FilesCollectionRender
     }
 
 
-    public function js(?string $collectionName = null, array $attributes = [], bool $loadContent = false): string
+    public function js(?string $collectionName = NULL, array $attributes = [], bool $loadContent = FALSE): string
     {
         $collection = $this->getSelectedCollection(Engine::JS, $collectionName);
         $collectionName = $collection->getName();
@@ -121,10 +121,11 @@ class FilesCollectionRender
         $attributes = array_merge($attributes, $collection->getOutputElementAttributes());
         $attributes['type'] = self::SCRIPT_TYPE_ATTRIBUTE;
         $basePath = $this->getCollectionBasePath($collectionName, Engine::JS);
-        $filePathParameter = null;
+        $filePathParameter = NULL;
 
         if ($loadContent || $collection->isContentLoadingEnabled()) {
             $filePathParameter = $this->getCollectionFilePath($basePath);
+
         } else {
             $basePath = $this->compiler->getPublicPathPrefix() . $basePath;
             $attributes['src'] = $this->addVersionToBasePath($basePath);
@@ -138,7 +139,7 @@ class FilesCollectionRender
      * @param array|string|NULL $collectionsNames
      * @return string
      */
-    public function jsPrefetch($collectionsNames = null): string
+    public function jsPrefetch($collectionsNames = NULL): string
     {
         return $this->generateMetaLinkElements($collectionsNames, Engine::JS, self::LINK_PREFETCH);
     }
@@ -148,25 +149,22 @@ class FilesCollectionRender
      * @param array|string|NULL $collectionsNames
      * @return string
      */
-    public function jsPreload($collectionsNames = null): string
+    public function jsPreload($collectionsNames = NULL): string
     {
         return $this->generateMetaLinkElements(
-            $collectionsNames,
-            Engine::JS,
-            self::LINK_PRELOAD,
-            self::LINK_PRELOAD_AS_JS
+            $collectionsNames, Engine::JS, self::LINK_PRELOAD, self::LINK_PRELOAD_AS_JS
         );
     }
 
 
-    public function selectCollection(?string $collectionName = null): FilesCollectionRender
+    public function selectCollection(?string $collectionName = NULL): FilesCollectionRender
     {
         $this->selectedCollectionName = $collectionName;
         return $this;
     }
 
 
-    public function setPrefix(?string $prefix = null): FilesCollectionRender
+    public function setPrefix(?string $prefix = NULL): FilesCollectionRender
     {
         $this->selectedPrefix = $prefix;
         return $this;
@@ -191,14 +189,14 @@ class FilesCollectionRender
     }
 
 
-    private function generateElement(string $element, array $attributes, ?string $filePath = null): string
+    private function generateElement(string $element, array $attributes, ?string $filePath = NULL): string
     {
         $tag = '<' . $element;
 
         foreach ($attributes as $attribute => $value) {
             $tag .= ' ' . $attribute;
 
-            if ($value !== true) {
+            if ($value !== TRUE) {
                 $tag .= '="' . $value . '"';
             }
         }
@@ -213,20 +211,26 @@ class FilesCollectionRender
             $tag .= '</' . $element . '>';
         }
 
-        $this->selectedPrefix = null;
+        $this->selectedPrefix = NULL;
 
         return $tag;
     }
 
 
+
     /**
-     * @param array|string|NULL $collectionsNames
+     * @param array|string|null $collectionsNames
+     * @param string|null $collectionsType
+     * @param string|null $rel
+     * @param string|null $as
+     * @return string
+     * @throws Exception
      */
     private function generateMetaLinkElements(
         $collectionsNames = null,
-        string $collectionsType,
-        string $rel,
-        ?string $as = null
+        $collectionsType = null,
+        string $rel = null,
+        ?string $as = NULL
     ): string {
         $tags = '';
         $attributes['rel'] = $rel;
@@ -235,12 +239,14 @@ class FilesCollectionRender
             $attributes['as'] = $as;
         }
 
-        if (!$collectionsNames) {
+        if ( ! $collectionsNames) {
             $collectionsNames[] = $this->getSelectedCollection($collectionsType)->getName();
+
         } elseif (is_string($collectionsNames)) {
             $collectionsNames = [$this->getSelectedCollection($collectionsType, $collectionsNames)->getName()];
+
         } else {
-            foreach ($collectionsNames as $collectionName) {
+            foreach($collectionsNames as $collectionName) {
                 $this->compiler->getFilesCollection($collectionsType, $collectionName);
             }
         }
@@ -288,9 +294,9 @@ class FilesCollectionRender
     }
 
 
-    private function getSelectedCollection(string $type, ?string $collectionName = null): FilesCollection
+    private function getSelectedCollection(string $type, ?string $collectionName = NULL): FilesCollection
     {
-        if (!$collectionName && !$this->selectedCollectionName) {
+        if ( ! $collectionName && ! $this->selectedCollectionName) {
             throw new Exception('Trying to call files collection render on NULL.');
         }
 
@@ -298,4 +304,5 @@ class FilesCollectionRender
 
         return $this->compiler->getFilesCollection($type, $collectionName);
     }
+
 }

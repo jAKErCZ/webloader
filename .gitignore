@@ -1,8 +1,8 @@
-vendor/
-.idea/
-/webtemp/
-/tests/nette-tester/webtemp/actual/
-/tests/nette-tester/output/
+vendor
+.idea
+/webtemp
+/tests/nette-tester/webtemp/actual
+/tests/nette-tester/output
 composer.lock
 docker-compose.yml
 coverage.xml
