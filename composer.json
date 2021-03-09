@@ -1,5 +1,5 @@
 {
-	"name": "machy8/webloader",
+	"name": "jakercz/webloader",
 	"description": "Simple, easy to use, php bundler for javascript and css",
 	"keywords": ["webloader", "module-bundler", "javascript", "css", "frontend", "build-tool"],
 	"license": "BSD-3-Clause",
